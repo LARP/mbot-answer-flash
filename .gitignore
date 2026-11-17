@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+backup/
+.venv/
+.env
+*.db
+*.db-*
+memoria.json
+memoria_v2.json
+descubrimiento.json
+personal.json
+notas.json
+ejecuciones.json
+herramientas.json
