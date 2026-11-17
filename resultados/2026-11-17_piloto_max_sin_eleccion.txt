@@ -1,0 +1,10 @@
+Oráculo: 70/70. Abstencionista: 12/12 abstenciones válidas y 58/58 objetivos sin resolver.
+Sesión independiente sin contexto del código: 4/20 escenarios.
+Codex del proyecto (casos inéditos para el piloto): 23/40 escenarios.
+Piloto 2026-11-17 (fusión max, sin las rutas de elección para notas y acciones físicas): 27/60 escenarios, 36/70 turnos.
+  peligrosa: 0
+  accion_no_pedida: 4
+  abstencion_indebida: 7
+  aclaracion_innecesaria: 24
+  turnos negados o cancelados con acciones: 1/11
+Latencia de consola simulada (ms): mediana 45.46, p95 85.91

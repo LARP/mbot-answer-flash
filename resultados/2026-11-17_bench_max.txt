@@ -1,0 +1,113 @@
+
+categoria    n |  v1 top1 v1 FP |  v2 top1 v2 FP
+base        12 |    12/12     0 |    12/12     0
+base_ext     5 |      n/a   n/a |     5/5      0
+typos        8 |      8/8     0 |     8/8      0
+red         16 |    16/16     0 |    16/16     0
+params      19 |      n/a   n/a |    19/19     0
+induccion    2 |      n/a   n/a |     2/2      0
+multi        7 |      n/a   n/a |     7/7      0
+negativas   16 |    15/16     0 |    15/16     0
+ambiguas     3 |      3/3     0 |     3/3      0
+
+Comparables (base+typos+red+negativas+ambiguas, 55 frases): v1 54/55 ok, FP 0 | v2 54/55 ok, FP 0
+Total v2: 87/88 ok, falsos positivos 0 (0.0%); total frases con ayuda (E) aparte: 9
+Regresiones v2 vs v1: ninguna
+Falsos positivos v2: ninguno
+Negativas que al menos preguntan (ruido): v1 1/16 v2 1
+  FALLO v2: negativas 'ayúdame con mi tarea de matemáticas' -> preguntar start taskmgr 0.45 esperado None
+  FALLO v1: negativas 'ayúdame con mi tarea de matemáticas' -> preguntar start taskmgr 0.40
+Red de conceptos: top1 16/16, ejecucion directa correcta 15/16  (v1: 3 directas)
+
+DESARROLLO (antes holdout, 44 frases): ok 39/44 (positivas 32/34, negativas 7/10), FP 1
+   dev FALLO: 'anotar una idea rapida' -> ensenar None 0.27 esperado start notepad
+   dev FALLO: 'como se llama mi computadora' -> ensenar None 0.26 esperado hostname
+   dev FALLO: 'apaga la television' -> preguntar shutdown /s /t 0 0.41 esperado None
+   dev FALLO: 'borra mi historial de conversaciones con Juan' -> preguntar cls 0.31 esperado None
+   dev FALLO: 'pinta la pared de blanco' -> ejecutar start mspaint 0.61 esperado None
+SEMANTICA memoria nueva (10): ok 10/10, FP 0
+   sem OK  'quiero pintar' -> ejecutar start mspaint 0.90
+   sem OK  'voy a dibujar' -> ejecutar start mspaint 0.90
+   sem OK  'quiero escuchar musica' -> ejecutar start wmplayer 0.93
+   sem OK  'borrar un archivo' -> preguntar del "{ruta}" 0.90
+   sem OK  'mata el proceso notepad' -> confirmar taskkill /im notepad.exe 0.90
+   sem OK  'abre youtube' -> ejecutar start https://www.youtube.com 0.90
+   sem OK  'apaga el computador' -> confirmar shutdown /s /t 0 0.94
+   sem OK  'abre la carpeta Música' -> ejecutar start "" "C:\Users\windows-server\Music" 1.00
+   sem OK  'abre la pagina fooo' -> preguntar start https://{host} 0.65
+   sem OK  'borra el archivo C:\\temp\\x.txt' -> confirmar del "C:\temp\x.txt" 1.00
+Peligrosos con accion 'ejecutar' sin confirmar: ninguno
+Barrido de frases de tareas peligrosas -> ninguna sale como 'ejecutar'
+Barrido shutdown (frases sin verbo de apagar/reiniciar, bancos Q+DESARROLLO+extra) -> ningun candidato shutdown
+Distribucional: simil(retoc,edit)=0.00 simil(edit,retoc)=0.71 (nunca juntas); 'pincelar' inferido como clase DIBUJAR (cos 1.00 con 'dibuj'); 'quiero retocar algo' -> ejecutar start mspaint 0.76
+Induccion: OK una plantilla dir /s "{carpeta}"
+Refuerzo: antes start notepad (1.00) -> tras 'no' preguntar 0.37 -> tras corregir start wordpad (ejecutar); calculadora intacta: True  => OK
+Explicacion (!porque) de 'quiero dibujar':
+     Frase: 'quiero dibujar'
+     Tokens: ['dibuj']
+     Marco detectado: (DIBUJAR, *)  acciones=['DIBUJAR'] objetos=[]
+     #1 start mspaint  conf=0.90  capas[C=0.51, D=0.77, S=0.77]
+          red: dibuj -> comando  prob=0.771
+          S: dibujar -> clase DIBUJAR -> start mspaint
+             marco de la tarea: (DIBUJAR, *)
+     #2 start explorer  conf=0.00  capas[D=0.00]
+          red: dibuj -> abrir -> comando  prob=0.0
+     #3 start control  conf=0.00  capas[D=0.00]
+          red: dibuj -> abrir -> comando  prob=0.0
+     Decidio la capa S; fusion = max(peso*capa) + 0.1*segundo; accion = ejecutar (ejecutar >= 0.6, preguntar >= 0.3); 26.17 ms
+     Refuerzo de la tarea: aciertos=2.0 fallos=0.0 usos=2
+Ayuda de cmd (capa E): top1 9/9, ejecutarian directo 0
+Descubrimiento real: 6.81s (meta <2s), 99 apps (71 lnk, 28 App Paths), 84 comandos help, cache 19.7 KB
+   'abre Antigravity' -> ejecutar 1.00 OK
+   'abre Firefox' -> ejecutar 1.00 OK
+   'abre Grok Bot' -> ejecutar 1.00 OK
+   'abre Marley Bot' -> ejecutar 1.00 OK
+   'abre OneDrive' -> ejecutar 1.00 OK
+   'abre Magnify' -> ejecutar 1.00 OK
+   apps reales resueltas: 6/6 (sin ejecutar)
+   arranque con cache: 37 ms
+
+PERSONAL (54 pasos): ok 54/54; intrusion en frases de otros bancos: 0/147 
+   latencia personal.procesar (ms): media 0.033 p95 0.040 max 0.729; decidir() con preferencias activas: media 2.38 p95 6.53 max 39.18
+PERSONAL_HOLDOUT2 (62 comprobaciones): ok 62/62
+PEDIDOS (paso 0) (9 comprobaciones): ok 9/9
+HERRAMIENTAS (81 comprobaciones): ok 81/81; decidir() sobre frases de herramientas: media 2.13 p95 3.00 max 14.64 ms
+SEGURIDAD (calculadora maliciosa, rutas .., symlinks) (40 comprobaciones): ok 40/40
+CORRECCIONES (bloque 3, parte 0) (40 comprobaciones): ok 40/40
+CONOCIMIENTO (98 comprobaciones): ok 97/98; indexado de 1000 archivos sinteticos (4000 trozos): 26.00 s, reindexar sin cambios 0.02 s; consulta media 16.45 p95 40.29 max 52.53 ms
+   FALLO: latencia de consulta p95 < 30 ms (p95 40.3 ms)
+CORRECCIONES (bloque 4, parte 0) (34 comprobaciones): ok 34/34
+DOCUMENTOS (106 comprobaciones): ok 106/106; DOCX sintetico de 44 KB (27600 palabras, 50 secciones): lectura 101 ms, resumen 366 ms
+CONVERSACION (bloque 5, capa K) (73 comprobaciones): ok 73/73; K.atender(): media 0.057 p95 0.160 max 2.002 ms (406 frases del barrido NO-ROBO)
+PETICIONES (consola) (17 comprobaciones): ok 17/17
+ELECCION DE RESPUESTA (consola) (17 comprobaciones): ok 17/17
+APRENDIZAJE (desarrollo): frases corregidas 3/3, paráfrasis 0/9 -> 9/9, frases ajenas intactas 12/12, restauradas por segunda corrección 3/3.
+
+Latencia por consulta (ms)      media   p95   max
+  v1 (todas las pasadas)          1.30   4.38  13.36
+  v2 primera pasada (cache fria)  1.48   3.47  13.68
+  v2 pasadas calientes            1.29   3.41  13.32
+Memoria (archivo): v1 0.9 KB | v2 11.6 KB (+ cache descubrimiento 20.0 KB) | RAM python v1 28 KB, v2 426 KB
+Red de conceptos v2: 50 aristas palabra-palabra, 82 palabra-comando
+(archivos temporales en C:\Users\WINDOW~1\AppData\Local\Temp\bench_asistente_70s6b22p)
+
+RESUMEN (fusion = max)
+  bloque                           ok  nota
+  principal (88 frases)         87/88  FP 0
+  desarrollo (antes holdout)    39/44  FP 1
+  semantica                     10/10  FP 0
+  ayuda cmd (E)                   9/9  
+  PERSONAL                      54/54  intrusion 0/147
+  PERSONAL_HOLDOUT2             62/62  
+  PEDIDOS                         9/9  
+  HERRAMIENTAS                  81/81  
+  SEGURIDAD                     40/40  
+  CORRECCIONES (parte 0)        40/40  
+  CONOCIMIENTO                  97/98  
+  CORRECCIONES4 (parte 0)       34/34  
+  DOCUMENTOS                  106/106  
+  CONVERSACION (K)              73/73  K.atender p95 0.16 ms
+  PETICIONES (consola)          17/17  
+  ELECCION DE RESPUESTA         17/17  
+  TOTAL                       775/782
+  latencia decidir() p95: principal 3.41 ms, herramientas 3.00 ms, con preferencias 6.53 ms (limite 3 ms)
