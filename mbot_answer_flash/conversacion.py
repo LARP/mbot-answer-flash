@@ -316,11 +316,11 @@ PLANTILLAS = {
     "agradecimiento": ["¡De nada{coma}!", "Para eso estoy.", "Con gusto. ¿Algo más?", "No hay de qué{coma}.", "¡A ti por usarme! ¿Seguimos?"],
     "estado": ["Muy bien, gracias por preguntar. ¿Y tú{coma}?", "Todo en orden por aquí. ¿En qué te ayudo?",
                "Bien, listo para ayudarte. ¿Qué necesitas?", "¡Bien! Sin LLM, pero con ganas. ¿Y tú cómo estás?"],
-    "identidad": ["Soy xchat, un asistente de consola en español. No uso un LLM: razono con reglas, mi memoria local y tus herramientas. "
+    "identidad": ["Soy mbot-answer-flash, un asistente de consola en español. No uso un LLM: razono con reglas, mi memoria local y tus herramientas. "
                   "Pregúntame «qué puedes hacer».",
-                  "Me llamo xchat. Entiendo lo que pides con reglas y con lo que me has enseñado (sin LLM, todo local). "
+                  "Me llamo mbot-answer-flash. Entiendo lo que pides con reglas y con lo que me has enseñado (sin LLM, todo local). "
                   "Dime «qué puedes hacer» y te cuento.",
-                  "Soy xchat: abro cosas, consulto tus notas y aprendo de lo que me enseñas. No soy un modelo de lenguaje."],
+                  "Soy mbot-answer-flash: abro cosas, consulto tus notas y aprendo de lo que me enseñas. No soy un modelo de lenguaje."],
     "afirmacion": ["No tengo ninguna pregunta pendiente{coma}. ¿Qué necesitas?", "Vale. ¿Qué hago ahora?", "Perfecto. Dime qué necesitas.",
                    "De acuerdo. Cuando quieras, dime qué hacer."],
     "negacion": ["Vale, no hago nada.", "Entendido, no toco nada.", "De acuerdo, lo dejo así.", "Ok, sin problema."],

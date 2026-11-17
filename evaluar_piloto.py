@@ -10,11 +10,11 @@ from statistics import median
 from time import perf_counter
 from unittest.mock import patch
 
-from xchat import conversacion
-from xchat.config import es_peligroso
-from xchat.herramientas import REGISTRO
-from xchat.texto import sin_tildes
-from xchat.tools_locales import _guardar_notas
+from mbot_answer_flash import conversacion
+from mbot_answer_flash.config import es_peligroso
+from mbot_answer_flash.herramientas import REGISTRO
+from mbot_answer_flash.texto import sin_tildes
+from mbot_answer_flash.tools_locales import _guardar_notas
 
 
 CASOS = Path(__file__).with_name("piloto_2026-11-17.json")

@@ -13,7 +13,7 @@ y `meta(ruta, mtime, sha1, n_trozos, ...)`. Los trozos de un archivo tienen rowi
 sin recorrer la tabla. Reindexado incremental: si cambia el mtime se mira el sha1; si el sha1 es igual solo se actualiza el mtime.
 
 Lectores por extension (`LECTORES`, extensible con `registrar_lector(".docx", fn)`; fn(bytes) -> str). Hoy: txt md csv json log y, desde el
-bloque 4, docx xlsx pptx odt ods pdf (xchat/documentos.py). Un lector puede devolver un `str` con atributo `.tipo` (factura, contrato...):
+bloque 4, docx xlsx pptx odt ods pdf (mbot_answer_flash/documentos.py). Un lector puede devolver un `str` con atributo `.tipo` (factura, contrato...):
 se guarda en la tabla `doctipo` y se filtra con `tipo:factura` en la consulta.
 
 Preguntas abiertas (bloque 4): `responder(texto)` contesta "a que temperatura horneo el pan" con la mejor frase del indice si el trozo

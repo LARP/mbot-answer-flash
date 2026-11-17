@@ -1,5 +1,5 @@
 """
-Paquete xchat (antes asistente.py monolitico). Asistente CMD v2: razonamiento basico SIN LLM (solo libreria estandar de Python).
+Paquete mbot_answer_flash (antes asistente.py monolitico). Asistente CMD v2: razonamiento basico SIN LLM (solo libreria estandar de Python).
 
 Capas (se consultan en orden y se fusionan, ver `Asistente.decidir`):
   A  exacta/plantilla  frase normalizada == frase aprendida -> 1.0 (plantilla: 0.97).

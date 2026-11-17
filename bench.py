@@ -13,7 +13,7 @@ import asistente_v1 as v1
 
 VERBOSE = "-v" in sys.argv
 FUSION = next((x.split("=", 1)[1] for x in sys.argv if x.startswith("--fusion=")), "max")   # max (actual) | rrf (experimento)
-import xchat.config as _cfg
+import mbot_answer_flash.config as _cfg
 _cfg.FUSION = FUSION
 TMP = tempfile.mkdtemp(prefix="bench_asistente_")
 HOME = os.path.expanduser("~")
@@ -139,7 +139,7 @@ SEM = [("quiero pintar", "start mspaint"), ("voy a dibujar", "start mspaint"),
 V1_CATS = {"base", "typos", "red", "negativas", "ambiguas"}
 
 
-# ---------------------------------------------------------------- PERSONAL (escrito ANTES de implementar xchat/personal.py)
+# ---------------------------------------------------------------- PERSONAL (escrito ANTES de implementar mbot_answer_flash/personal.py)
 # Escenario ordenado sobre UNA instancia con reloj inyectable (determinista). Cada paso: (frase | accion, comprobacion(a, r)).
 # a = Asistente; r = a.personal.procesar(frase) (None si la frase no es personal) o lo que devuelva la accion.
 # Reloj inicial: miercoles 2026-03-11 10:00.
@@ -327,7 +327,7 @@ def bloque_holdout2(det_p):
             chk(f"seguridad {nom} {f!r} -> {d.accion}", d.accion != "ejecutar")
     chk("seguridad: 'abre el navegador' sigue ejecutando", a.decidir("abre el navegador").accion == "ejecutar")
     # 2. validacion de comandos escritos a mano
-    from xchat.ejecucion import parece_comando
+    from mbot_answer_flash.ejecucion import parece_comando
     for c, esp in [("mi nombre es Ana", False), ("hola como estas hoy", False), ("ipconfig /all", True), ("start notepad", True),
                    ("dir C:\\temp", True), ("calc", True), ("ping google.com", True), ("echo hola mundo", True)]:
         chk(f"parece_comando({c!r})", parece_comando(a, c) == esp)
@@ -467,10 +467,10 @@ def _junction(link, destino):
 def bloque_herramientas(det_p):
     """Devuelve (res_funcional, res_seguridad, lat_ms): listas de (etiqueta, bool)."""
     from unittest import mock
-    from xchat import herramientas as H
-    from xchat.registro import Registro, DetectorBucles
-    from xchat.verificacion import Verificador
-    from xchat.tools_locales import calcular_seguro
+    from mbot_answer_flash import herramientas as H
+    from mbot_answer_flash.registro import Registro, DetectorBucles
+    from mbot_answer_flash.verificacion import Verificador
+    from mbot_answer_flash.tools_locales import calcular_seguro
     res, seg = [], []
 
     def chk(etq, f, dest=res):
@@ -652,7 +652,7 @@ def bloque_herramientas(det_p):
         x.proponer_plan("abre notepad; abre calculadora"), x.proponer_plan("ver mi ip y despues abrir el administrador de tareas")))(_nuevo(det_p, "plan2.json")))
     chk("plugin de usuario: carga desde carpeta con importlib", lambda: (lambda carp: (os.makedirs(carp, exist_ok=True),
         open(os.path.join(carp, "p1.py"), "w", encoding="utf-8").write(
-            "from xchat.herramientas import herramienta\n@herramienta('zz_plug', verbos=('*',), objetos=('HORA',), descripcion='t')\n"
+            "from mbot_answer_flash.herramientas import herramienta\n@herramienta('zz_plug', verbos=('*',), objetos=('HORA',), descripcion='t')\n"
             "def f(ctx):\n    return 'plug'\n"),
         open(os.path.join(carp, "roto.py"), "w", encoding="utf-8").write("raise RuntimeError('x')\n"),
         (lambda nombres, errores: ("zz_plug" in nombres and len(errores) == 1 and "zz_plug" in H.REGISTRO and H.REGISTRO.pop("zz_plug")))(*H.cargar_plugins(carp)))[-1])(os.path.join(w.raiz, "plugins")))
@@ -767,7 +767,7 @@ def bloque_correcciones(det_p):
     chk("3. 'raiz de 144' -> @calcular = 12", lambda: _elige("raiz de 144", "calcular") and w.correr("raiz de 144")[1].datos["valor"] == 12)
     chk("3. 'raíz cuadrada de 2' -> @calcular = 1.4142135624", lambda: _elige("raíz cuadrada de 2", "calcular")
         and abs(w.correr("raíz cuadrada de 2")[1].datos["valor"] - 2 ** 0.5) < 1e-9)
-    chk("3. sqrt en la lista blanca de la calculadora", lambda: __import__("xchat.tools_locales", fromlist=["x"]).calcular_seguro("sqrt(16)") == 4)
+    chk("3. sqrt en la lista blanca de la calculadora", lambda: __import__("mbot_answer_flash.tools_locales", fromlist=["x"]).calcular_seguro("sqrt(16)") == 4)
     chk("3. 'encuentra los pdf en Descargas' -> @buscar_archivos *.pdf (2 hallados)", lambda: _elige("encuentra los pdf en Descargas", "buscar_archivos", patron="*.pdf")
         and len(w.correr("encuentra los pdf en Descargas")[1].datos["encontrados"]) == 2)
     chk("3. 'localiza los pdf en Descargas' -> @buscar_archivos", lambda: _elige("localiza los pdf en Descargas", "buscar_archivos"))
@@ -781,7 +781,7 @@ def bloque_correcciones(det_p):
         (lambda r: "6.0 GB libres" in r.texto and "16.0 GB" in r.texto and r.datos["libre"] == 6 * GB)(w.correr("memoria libre")[1]))[1])
 
     def _real():
-        from xchat.tools_locales import _memoria_win
+        from mbot_answer_flash.tools_locales import _memoria_win
         m = _memoria_win()
         return m["total"] > 0 and 0 <= m["libre"] <= m["total"] and 0 <= m["uso_pct"] <= 100
     chk("3. @memoria real (ctypes GlobalMemoryStatusEx): total>0, libre<=total", _real)
@@ -868,8 +868,8 @@ def crear_corpus(raiz):
 def bloque_conocimiento(det_p):
     """~90 comprobaciones del buscador de conocimiento + latencias. Devuelve (res, info)."""
     import shutil
-    from xchat import conocimiento as K
-    from xchat import herramientas as H
+    from mbot_answer_flash import conocimiento as K
+    from mbot_answer_flash import herramientas as H
     res, info = [], {}
 
     def chk(etq, f):
@@ -1212,7 +1212,7 @@ def bloque_correcciones4(det_p):
     # la consola: una pregunta abierta se contesta con el indice (E/S simuladas; nada se ejecuta)
     def _consola():
         import builtins, contextlib
-        from xchat import consola as _co
+        from mbot_answer_flash import consola as _co
         entradas = iter(["en qué puerto corre postgres", "!porque", "!salir"])
         sal = _io_.StringIO()
         orig_in, orig_as = builtins.input, _co.Asistente
@@ -1479,8 +1479,8 @@ class _MundoDoc:
 def bloque_documentos(det_p):
     """~90 comprobaciones del bloque 4 (lectura de documentos). Devuelve (res, info)."""
     import time as _t
-    from xchat import documentos as D
-    from xchat import conocimiento as K
+    from mbot_answer_flash import documentos as D
+    from mbot_answer_flash import conocimiento as K
     res, info = [], {}
 
     def chk(etq, f):
@@ -1720,7 +1720,7 @@ class E2:
         return [d.cmd for d in p] if p else None
 
 
-# ---------------------------------------------------------------- BLOQUE 5: CONVERSACION (capa K) -- escrito ANTES de implementar xchat/conversacion.py
+# ---------------------------------------------------------------- BLOQUE 5: CONVERSACION (capa K) -- escrito ANTES de implementar mbot_answer_flash/conversacion.py
 # Todo con la API y con la consola de mentira: `input` y el ejecutor (ejecucion.ejecutar_ex) simulados; NUNCA se lanza un proceso ni se lee stdin.
 import builtins, contextlib, io, types as _types
 from datetime import timedelta
@@ -1746,7 +1746,7 @@ CONV_INTENCIONES = [      # (intencion, variantes con typos y alargamientos): de
 def _consola_falsa(a, frase, resp=(), log=None):
     """Procesa UNA linea con la consola real (consola.procesar_linea) pero con input y ejecutor simulados.
     Devuelve SimpleNamespace(out, ran, prompts, eof). `ran` = comandos que habrian llegado al shell."""
-    from xchat import consola, ejecucion
+    from mbot_answer_flash import consola, ejecucion
     it = iter(resp)
     prompts, ran = [], []
 
@@ -1974,7 +1974,7 @@ def bloque_conversacion(det_p, frases_previas):
     txt2 = c.conv.atender("que puedes hacer", c.decidir("que puedes hacer")).texto
     chk("tras '!herramienta off dado' ya no lo menciona", "tira un dado" not in txt2)
     c.herr.poner("dado", True)
-    from xchat import herramientas as _H
+    from mbot_answer_flash import herramientas as _H
     _H._ORIGEN[0] = "plugin:demo.py"
     try:
         @_H.herramienta("demo_k", verbos=("*",), objetos=("*",), descripcion="plugin de prueba: 'saluda al planeta'")
@@ -2223,7 +2223,7 @@ def kb(p):
 
 def main():
     # ---- grabadora de frases (para el barrido NO-ROBO del bloque CONVERSACION): todo lo que ven decidir() y personal.procesar()
-    from xchat.personal import Personal as _P
+    from mbot_answer_flash.personal import Personal as _P
     frases_vistas = []
     _dec0, _proc0 = v2.Asistente.decidir, _P.procesar
     def _dec(self, texto):

@@ -192,7 +192,7 @@ def cargar_plugins(carpeta):
         antes = {k: id(v) for k, v in REGISTRO.items()}
         _ORIGEN[0] = "plugin:" + f
         try:
-            spec = importlib.util.spec_from_file_location("xchat_plugin_" + f[:-3], ruta)
+            spec = importlib.util.spec_from_file_location("mbot_answer_flash_plugin_" + f[:-3], ruta)
             mod = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(mod)
         except (Exception, SystemExit) as e:             # un plugin roto no tumba el asistente
@@ -235,9 +235,9 @@ class Ctx:
     home: str = os.path.expanduser("~")
     tope_seg: float = 3.0
     tope_res: int = 50
-    conocimiento: object = None          # buscador de conocimiento (xchat.conocimiento.Conocimiento), lo pone el Asistente
+    conocimiento: object = None          # buscador de conocimiento (mbot_answer_flash.conocimiento.Conocimiento), lo pone el Asistente
     memoria: object = None               # () -> {total, libre, uso_pct}; None = GlobalMemoryStatusEx (ver tools_locales)
-    docs: object = None                  # SesionDocs (documento reciente, cache y traza de !porque); lo crea xchat.documentos al primer uso
+    docs: object = None                  # SesionDocs (documento reciente, cache y traza de !porque); lo crea mbot_answer_flash.documentos al primer uso
 
 
 # ---------------------------------------------------------------- validacion de rutas (estilo RoninAgent validatePath)

@@ -5,7 +5,7 @@ Como escribir un plugin
 1. Crea un archivo .py en esta carpeta (plugins/). Los archivos que empiezan por "_" se ignoran.
 2. Importa el decorador y registra una funcion:
 
-       from xchat.herramientas import herramienta, Resultado
+       from mbot_answer_flash.herramientas import herramienta, Resultado
 
        @herramienta(
            "dado",                                  # nombre: se invoca como comando interno @dado
@@ -29,7 +29,7 @@ el asistente lo ignora y `!herramientas` muestra el error.
 """
 import random
 
-from xchat.herramientas import Resultado, herramienta
+from mbot_answer_flash.herramientas import Resultado, herramienta
 
 
 @herramienta("dado", verbos=("tira", "lanza", "tirar", "lanzar"), objetos=("dado",), slots={"caras": ("n", 6)},
