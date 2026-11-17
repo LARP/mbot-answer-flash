@@ -33,7 +33,7 @@ SEMANTICA memoria nueva (10): ok 10/10, FP 0
    sem OK  'mata el proceso notepad' -> confirmar taskkill /im notepad.exe 0.90
    sem OK  'abre youtube' -> ejecutar start https://www.youtube.com 0.90
    sem OK  'apaga el computador' -> confirmar shutdown /s /t 0 0.94
-   sem OK  'abre la carpeta Música' -> ejecutar start "" "C:\Users\windows-server\Music" 1.00
+   sem OK  'abre la carpeta Música' -> ejecutar start "" "C:\Users\usuario\Music" 1.00
    sem OK  'abre la pagina fooo' -> preguntar start https://{host} 0.65
    sem OK  'borra el archivo C:\\temp\\x.txt' -> confirmar del "C:\temp\x.txt" 1.00
 Peligrosos con accion 'ejecutar' sin confirmar: ninguno
