@@ -45,7 +45,7 @@ def _lnk_destino(ruta):
         return None
 
 
-def descubrir(ruta_cache=DESC_PATH):
+def descubrir(ruta_cache=DESC_PATH, con_help=True):
     """Escanea Windows (lnk del Menu Inicio, App Paths, `help`) y guarda la cache. Devuelve el dict."""
     t0 = perf_counter()
     apps, vistos = [], set()
@@ -90,6 +90,8 @@ def descubrir(ruta_cache=DESC_PATH):
         pass
     ayuda = []
     try:
+        if not con_help:
+            raise OSError("sin help")
         r = subprocess.run(["cmd", "/c", "help"], capture_output=True, timeout=10)
         txt = r.stdout.decode("oem", "replace")
         for ln in txt.splitlines():
@@ -117,13 +119,13 @@ class DescubrimientoMixin:
         if d is None and auto:
             if not silencioso:
                 print("  Descubriendo aplicaciones y comandos de Windows (solo la primera vez)...")
-            d = descubrir(self.ruta_desc)
+            d = descubrir(self.ruta_desc, getattr(self, "con_help", True))
             if not silencioso:
                 print(f"  Listo en {d['dur']:.2f}s: {len(d['apps'])} apps, {len(d['ayuda'])} comandos de help.")
         self.desc = d or {"apps": [], "ayuda": [], "dur": 0}
 
     def redescubrir(self):
-        self.desc = descubrir(self.ruta_desc)
+        self.desc = descubrir(self.ruta_desc, getattr(self, "con_help", True))
         self._cache_an.clear()
         self._indexar()
         return self.desc

@@ -11,12 +11,12 @@ Frases normales: "prefiero X", "mi navegador es X", "uso X para Y", "me gusta X"
 import math, os, re, unicodedata
 from datetime import datetime, timedelta
 
-from .config import BASE, MEM_PATH, PELIGROSO, UMBRAL_PREGUNTAR
+from .config import DATA, MEM_PATH, PELIGROSO, UMBRAL_PREGUNTAR
 from .lexico import ACCIONES, clases_de
 from .memoria import guardar_json
 from .texto import STOP, sin_tildes
 
-PERSONAL_PATH = os.path.join(BASE, "personal.json")
+PERSONAL_PATH = os.path.join(DATA, "personal.json")
 TOPE_K = 12               # hechos que muestra "que sabes de mi"
 TOPE_K_LIBRE = 5          # consultas de texto libre
 TOPE_CADENA = 50          # pasos maximos al recorrer superseded_by

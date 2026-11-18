@@ -19,7 +19,7 @@ import importlib.util, json, os, re, shutil, subprocess, sys, time
 from dataclasses import dataclass, field
 from datetime import datetime
 
-from .config import BASE, S_BASE
+from .config import BASE, DATA, S_BASE
 from .lexico import ACCIONES, GENERICAS, OBJETOS
 from .memoria import guardar_json
 from .texto import sin_tildes
@@ -230,7 +230,7 @@ class Ctx:
     usuario: str = ""
     equipo: str = ""
     so: str = ""
-    notas_path: str = os.path.join(BASE, "notas.json")
+    notas_path: str = os.path.join(DATA, "notas.json")
     carpetas: object = field(default_factory=dict)
     home: str = os.path.expanduser("~")
     tope_seg: float = 3.0

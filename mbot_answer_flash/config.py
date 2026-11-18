@@ -2,9 +2,11 @@
 import os, re
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-MEM_PATH = os.path.join(BASE, "memoria_v2.json")
-MEM_V1 = os.path.join(BASE, "memoria.json")
-DESC_PATH = os.path.join(BASE, "descubrimiento.json")
+# Carpeta de DATOS (memoria, notas, indice, cache). Si MBOT_ANSWER_FLASH_DATA_DIR existe se usa esa; si no, la del codigo, como siempre.
+DATA = os.environ.get("MBOT_ANSWER_FLASH_DATA_DIR") or BASE
+MEM_PATH = os.path.join(DATA, "memoria_v2.json")
+MEM_V1 = os.path.join(DATA, "memoria.json")
+DESC_PATH = os.path.join(DATA, "descubrimiento.json")
 MAX_FRASES = 15
 UMBRAL_EJECUTAR = 0.60
 UMBRAL_PREGUNTAR = 0.30
